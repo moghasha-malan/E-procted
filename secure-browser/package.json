@@ -1,0 +1,48 @@
+{
+  "name": "eshielded-secure-browser",
+  "version": "1.0.0",
+  "description": "Secure assessment browser for eShielded",
+  "author": "Team Airavata",
+  "license": "MIT",
+  "main": "browser.js",
+"scripts": {
+  "start": "electron .",
+  "build:mac": "electron-builder --mac && npm run sign-mac && npm run remove-quarantine",
+  "build:win": "electron-builder --win",
+  "build:linux": "electron-builder --linux",
+  "sign-mac": "if [ -d dist/mac-arm64 ]; then codesign --deep --force --sign - dist/mac-arm64/eShieldedSecureBrowser.app; else codesign --deep --force --sign - dist/mac/eShieldedSecureBrowser.app; fi",
+  "remove-quarantine": "xattr -dr com.apple.quarantine dist/*.dmg"
+},
+
+
+  "build": {
+    "appId": "com.eshielded.securebrowser",
+    "productName": "eShieldedSecureBrowser",
+    "files": [
+      "**/*"
+    ],
+    "directories": {
+      "buildResources": "icons"
+    },
+    "asar": true,
+    "win": {
+      "target": "nsis",
+      "icon": "icons/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icons/icon.icns",
+      "hardenedRuntime": false, 
+      "gatekeeperAssess": false, 
+      "entitlements": null
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icons/icon.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "^25.9.8",
+    "electron-builder": "^24.0.0"
+  }
+}
